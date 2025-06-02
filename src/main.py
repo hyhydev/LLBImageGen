@@ -12,15 +12,15 @@ with open('players.csv', newline='') as players:
     player = line.strip().split(',')
     if len(player) < 3:
       continue  # Skip lines that don't have enough data
-    name, character, skin = player[0], player[1], player[2]
+    name, character_name, skin_name = player[0], player[1], player[2]
 
-    print(f'Processing {name} with character {character} and skin {skin}')
+    print(f'Processing {name} with character {character_name} and skin {skin_name}')
     
     # Load the character image
     try:
-      character = Image.open(f'assets/{character}/{character}_{skin}.png')
+      character = Image.open(f'assets/{character_name}/{character_name}_{skin_name}.png')
     except FileNotFoundError:
-      print(f"Character image for {name} not found: assets/{character}/{character}_{skin}.png")
+      print(f"Character image for {name} not found: assets/{character_name}/{character_name}_{skin_name}.png")
       continue
 
     # Create a semi-transparent overlay
@@ -53,4 +53,4 @@ with open('players.csv', newline='') as players:
     draw.text((xoffset, yoffset), f'{name}', (255, 255, 255), font=font)
     
     # Save the modified image
-    character.save(f'../output/doombox_{name}.png')
+    character.save(f'../output/{character_name}_{name}.png')
