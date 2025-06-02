@@ -13,9 +13,15 @@ with open('players.csv', newline='') as players:
     if len(player) < 3:
       continue  # Skip lines that don't have enough data
     name, character, skin = player[0], player[1], player[2]
+
+    print(f'Processing {name} with character {character} and skin {skin}')
     
     # Load the character image
-    character = Image.open(f'assets/{character}_{skin}.png')
+    try:
+      character = Image.open(f'assets/{character}/{character}_{skin}.png')
+    except FileNotFoundError:
+      print(f"Character image for {name} not found: assets/{character}/{character}_{skin}.png")
+      continue
 
     # Create a semi-transparent overlay
     overlay = Image.new('RGBA', character.size, (0, 0, 0, 0))
@@ -27,7 +33,7 @@ with open('players.csv', newline='') as players:
     character = Image.alpha_composite(character, overlay)
     
     # Load the font
-    fontsize = 70
+    fontsize = 80
     font = ImageFont.truetype("assets/warownia-black-narrow.ttf", fontsize)
     
     # Draw the text on the image
@@ -41,7 +47,7 @@ with open('players.csv', newline='') as players:
     text_height = text_bbox[3] - text_bbox[1]
 
     xoffset = (400 - width) // 2
-    yoffset = 300 + (60 - text_height) // 2
+    yoffset = 300 + (40 - text_height) // 2
 
     draw.text((xoffset+6, yoffset+6), f'{name}', (0, 0, 0), font=font)
     draw.text((xoffset, yoffset), f'{name}', (255, 255, 255), font=font)
