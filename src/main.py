@@ -1,6 +1,11 @@
+import os
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
+
+# if an output directory does not exist, create it
+if not os.path.exists('../output'):
+  os.makedirs('../output')
 
 with open('players.csv', newline='') as players:
   for line in players:
