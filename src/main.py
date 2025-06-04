@@ -3,6 +3,9 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 
+success_count = 0
+failure_count = 0
+
 # if an output directory does not exist, create it
 if not os.path.exists('../output'):
   os.makedirs('../output')
@@ -21,12 +24,13 @@ with open('players.csv', newline='') as players:
       character = Image.open(f'assets/{character_name}/{character_name}_{skin_name}.png')
     except FileNotFoundError:
       print(f"Character image for {name} not found: assets/{character_name}/{character_name}_{skin_name}.png")
+      failure_count += 1
       continue
 
     # Create a semi-transparent overlay
     overlay = Image.new('RGBA', character.size, (0, 0, 0, 0))
     overlay_draw = ImageDraw.Draw(overlay)
-    overlay_draw.rectangle((0, 300, 400, 400), fill=(0, 0, 0, 60))
+    overlay_draw.rectangle((0, 300, 400, 400), fill=(0, 0, 0, 100))
 
     # Composite the overlay onto the character image
     character = character.convert('RGBA')  # Ensure character image is in RGBA mode
@@ -54,3 +58,7 @@ with open('players.csv', newline='') as players:
     
     # Save the modified image
     character.save(f'../output/{character_name}_{name}.png')
+
+    success_count += 1
+
+print(f'Processing complete: {success_count} successes, {failure_count} failures.')
